@@ -59,13 +59,9 @@ console.log(obj)
     criado permaneça intacto.
 */
 
-const third = (obj) => {
-  return{
-    ...obj,
-    d:3
-  }
+const third = (obj) => ({...obj, d:3})
  
-}
+
 
 const second = (obj) => third(obj)
 
