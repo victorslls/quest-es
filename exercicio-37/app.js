@@ -13,13 +13,14 @@ class Animal {
 
 class Rabbit extends Animal {
   constructor (name) {
+    super(name)
     this.name = name
     this.created = new Date()
   }
 }
 
-// let rabbit = new Rabbit('White Rabbit')
-
+let rabbit = new Rabbit('White Rabbit')
+console.log(rabbit);
 /*
   02
 
@@ -27,12 +28,27 @@ class Rabbit extends Animal {
     funcione.
 */
 
-// const counter = new Counter()
+class Counter {
+  constructor() {
+    this.count = 0
+  }
 
-// counter.getValue()
-// counter.increment()
-// counter.getValue()
+  
+  getValue(){
+    this.count
+  }
+  increment(){
+    this.count++
+  }
+}
 
+ const counter = new Counter()
+
+ counter.getValue()
+ counter.increment()
+ counter.getValue()
+
+ console.log(counter);
 /*
   03
 
