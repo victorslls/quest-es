@@ -190,7 +190,30 @@ textArea.addEventListener('input', showCounterParagraph)
 */
 
 
-const reduce = () => {}
-reduce([1,2,3], (acc, item) => acc + item , 0) 
+const reduce = (arr, func, initialValue) => {
+  let acc = initialValue
 
-console.log(reduce);
+  const accumulateCallbackReturn = (item, index, array) => {
+    acc = func(acc, item, index, array)
+   }
+
+  arr.forEach(accumulateCallbackReturn)
+
+  return acc
+};
+
+const creatItemBaseProperties = (acc, item) => {
+  acc["number-" + item] = item
+  return acc
+}
+
+const sumItem = (acc, item) => acc + item
+
+const sumItemPlusIndex =  (acc, _, index) => acc + index
+const sumItemUsingArrayParam = (acc, _, index, array) => acc + array[index]
+
+console.log(reduce([1, 2, 3], sumItem, 0));
+console.log(reduce([2, 3, 4], sumItem, 0));
+console.log(reduce([1, 2], creatItemBaseProperties, {}));
+console.log(reduce([1, 2], sumItemPlusIndex, 0));
+console.log(reduce([1, 2], sumItemUsingArrayParam, 0));
