@@ -11,6 +11,28 @@
 */
 
 
+// methodo
+const carProto= {
+  getColor () {
+    /*retorno de valor color */
+    return this.color
+  }
+}
+ /*cirando os dois novos objetos fazendo o obvjeto com o metodo get color ser prototype desses dois carros abaixo */
+
+let audiA8 = Object.create(carProto)
+let volvoS90 = Object.create(carProto)
+
+/*atribuindo valores diferentes aos objetos */
+audiA8.color ='azul'
+volvoS90.color = 'vermelho'
+
+/*testando metodo */
+console.log(audiA8.getColor(), volvoS90.getColor());
+console.log(carProto.isPrototypeOf(audiA8) && carProto.isPrototypeOf(volvoS90));
+
+ 
+
 
 /*
   02
@@ -31,10 +53,17 @@ const movie = {
 }
 
 function getSummary () {
-  return `${this.title} foi dirigido por ${this.director} e tem ${this.starringRole} no papel principal.`
+  const {title, director, starringRole} = this
+  return `${title} foi dirigido por ${director} e tem ${starringRole} no papel principal.`
 }
 
-console.log(getSummary())
+const getSummaryBound = getSummary.bind(movie)
+
+// 3 formas de fazer trazer o mesmo resultado
+// Chamando a função 'getSummaryBound'
+//console.log(getSummaryBound());
+//console.log(getSummary.call(movie))
+//console.log(getSummary.apply(movie))
 
 /*
   03
@@ -48,15 +77,26 @@ console.log(getSummary())
   - Descomente o código e crie a função.
 */
 
-/*
-console.log(
-  arrayToObj([
-    ['prop1', 'value1'], 
-    ['prop2', 'value2'],
-    ['prop3', 'value3']
-  ])
-)
-*/
+const createObj = (arr)=>  arr.reduce((acc, [key, value]) => {
+  console.log(acc.item);
+  acc[key] = value
+  return acc
+ }, {})
+
+const arrayToObj = (createObj)
+ 
+
+
+
+
+//console.log(
+//  arrayToObj([
+//    ['prop1', 'value1'], 
+//    ['prop2', 'value2'],
+//    ['prop3', 'value3']
+//  ])
+//)
+
 
 /*
   04
@@ -64,8 +104,9 @@ console.log(
   - Refatore as classes abaixo para factory functions.
 */
 
-const formatTimeUnits = units => units
-  .map(unit => unit < 10 ? `0${unit}` : unit)
+const concatenateZero = unit => unit < 10 ? `0${unit}` : unit
+
+const formatTimeUnits = units => units.map(concatenateZero)
 
 const getTime = () => {
   const date = new Date()
@@ -79,13 +120,62 @@ const getTime = () => {
 const getFormattedTime = template => {
   const [hours, minutes, seconds] = getTime()
   const formattedTime = formatTimeUnits([hours, minutes, seconds])
+  const getTimeAsArray = (_, index) => formattedTime[index]
 
   return template
     .split(':')
-    .map((_, index) => formattedTime[index])
+    .map(getTimeAsArray)
     .join(':')
 }
 
+
+
+const makeClock = ({ template }) => ({
+  template,
+  render() {
+    const formattedTime = getFormattedTime(this.template);
+    console.log(formattedTime);
+  },
+  start() {
+    const oneSecond = 1000;
+
+    this.render();
+    this.timer = setInterval(() => this.render(), oneSecond);
+  },
+  stop() {
+    clearInterval(this.timer);
+  },
+});
+
+
+const makeExtendClock = ({ template, precision = 1000 }) => ({
+  precision,
+  ...makeClock({ template }),
+  start () {
+    this.render();
+    this.timer = setInterval(() => this.render(), this.precision);
+  },
+});
+
+const clock = makeClock({template:'h:m:s'})
+const exetendClock = makeExtendClock({template:'h:m:s', precision:1000});
+
+
+clock.start()
+clock.stop()
+
+exetendClock.start()
+exetendClock.stop()
+
+
+
+
+
+
+
+
+/*classe refatorada  Refatorada para factory function*/
+/*
 class Clock {
   constructor ({ template }) {
     this.template = template
@@ -107,7 +197,11 @@ class Clock {
     clearInterval(this.timer)
   }
 }
+*/
 
+
+ /* classe extend Refatorada para factory function*/
+/*
 class ExtendedClock extends Clock {
   constructor (options) {
     super(options)
@@ -125,7 +219,7 @@ class ExtendedClock extends Clock {
 const clock = new ExtendedClock({ template: 'h:m:s', precision: 1000 })
 
 // clock.start()
-
+*/
 /*
   05
 
