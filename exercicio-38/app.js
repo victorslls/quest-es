@@ -259,6 +259,33 @@ const clock = new ExtendedClock({ template: 'h:m:s', precision: 1000 })
         - download, com o valor 'table.csv'.
 */
 
+const tableRows = document.querySelectorAll("tr")
+const exportBtn = document.querySelector('[data-js="export-table-btn"]')
+
+const getCellText = ({ textContent }) => textContent
+
+const getStringWiithCommas = ({ cells }) =>
+  Array.from(cells).map(getCellText).join(",")
+
+const creatCSVString = () =>
+  Array.from(tableRows).map(getStringWiithCommas).join("\n")
+
+const setCSVDownload = (CSVString) => {
+  const CSVURI = `data:text/csvcharset=utf-8,${encodeURIComponent(CSVString)}`
+
+  exportBtn.setAttribute("href", CSVURI)
+  exportBtn.setAttribute("download", "table.csv")
+
+};
+
+const exportTable = () => {
+  const CSVString = creatCSVString();
+
+  setCSVDownload(CSVString)
+}
+// Chama a função para gerar a string CSV assim que o DOM estiver pr
+//exportBtn.addEventListener("click", exportTable)
+
 
 
 /*
@@ -317,3 +344,109 @@ const clock = new ExtendedClock({ template: 'h:m:s', precision: 1000 })
   PS: o desafio aqui é você implementar essa aplicação sozinho(a), antes 
   de ver as próximas aulas, ok? =)
 */
+
+
+
+const currencyOneEl = document.querySelector('[data-js="currency-one"]');
+const currencyTwoEl = document.querySelector('[data-js="currency-two"]');
+const curreniesEl = document.querySelector('[data-js="currencies-container"]');
+const convertedValueEl = document.querySelector('[data-js="converted-value"]')
+const valuePrecisionEl = document.querySelector('[data-js="conversion-precision"]')
+const timesCurrencyOneEl = document.querySelector('[data-js="currency-one-times"]')
+
+let internalExchangeRate = {}
+
+
+
+const getUrl = (currency)  =>` https://v6.exchangerate-api.com/v6/74fec6afa301a3ca6e83db74/latest/${currency}`;
+
+
+const getErrormessage = (erroType) =>
+  ({
+    "unsupported-code": "A moeda não existe em nosso banco de dados.",
+    "malformed-request": "Sua solicitação naõ segue o padrão exigido",
+    "invalid-key": "A chave da API é invalida",
+    "inactive-account": "Seu e-mail não foi confirmado",
+    "quota-reached": "Você atingiu o número máximo de requisição da api",
+  }[erroType] || "Não foi possível obter as informações");
+
+const fetchExchangeRate = async (url) => {
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(
+        "Sua conexão falhou. Não foi possível obter as informações."
+      );
+    }
+
+    const extendRateData = await response.json();
+
+    if (extendRateData.result === "error") {
+      throw new Error(getErrormessage(extendRateData["error-type"]));
+    }
+
+    return extendRateData
+
+  } catch (err) {
+    const div = document.createElement("div");
+    const button = document.createElement("button");
+
+    div.textContent = err.message;
+    div.classList.add(
+      "alert",
+      "alert-warning",
+      "alert-dismissible",
+      "fade",
+      "show"
+    );
+    div.setAttribute("role", "alert");
+    button.classList.add("btn-close");
+    button.setAttribute("type", "button");
+    button.setAttribute("aria-label", "Close");
+
+    button.addEventListener("click", () => {
+      div.remove();
+    });
+
+    div.appendChild(button);
+    curreniesEl.insertAdjacentElement("afterend", div);
+  }
+};
+
+const init = async () => {
+  internalExchangeRate = {...(await fetchExchangeRate(getUrl('USD')))}
+
+  const getOption = selectedCurrency=>  Object.keys(internalExchangeRate.conversion_rates)
+  .map(currency => `<option ${ currency === selectedCurrency ? 'selected' : ''}>${currency}</option>`)
+  .join(' ')
+  
+  currencyOneEl.innerHTML = getOption('USD')
+  currencyTwoEl.innerHTML = getOption('BRL')
+
+  convertedValueEl.textContent = internalExchangeRate.conversion_rates.BRL.toFixed(2)
+  valuePrecisionEl.textContent = `1 ${currencyOneEl.value} = ${internalExchangeRate.conversion_rates.BRL} BRL`
+  
+
+}
+
+timesCurrencyOneEl.addEventListener('input', (e)=> {
+  internalExchangeRate
+  convertedValueEl.textContent= e.target.value *( internalExchangeRate.conversion_rates[currencyTwoEl.value]).toFixed(2)
+})
+
+currencyTwoEl.addEventListener('input', (e) => {
+  const currencyTwoValue = internalExchangeRate.conversion_rates[e.target.value]
+  convertedValueEl.textContent = (timesCurrencyOneEl.value * currencyTwoValue )
+  valuePrecisionEl.textContent= `1 USD = ${1* internalExchangeRate.conversion_rates[currencyTwoEl.value]} ${currencyTwoEl.value}`
+})
+
+currencyOneEl.addEventListener('input', async (e)=> {
+  internalExchangeRate = {... (await fetchExchangeRate(getUrl(e.target.value)))}
+
+  convertedValueEl.textContent = (timesCurrencyOneEl.value * internalExchangeRate.conversion_rates[currencyTwoEl.value]).toFixed(2)
+  valuePrecisionEl.textContent = `1${currencyOneEl.value} = ${1 * internalExchangeRate.conversion_rates[currencyTwoEl.value]} ${currencyTwoEl.value}`
+
+})
+
+init ()
