@@ -10,29 +10,25 @@
   - Teste o método getColor do prototype dos carros.
 */
 
-
 // methodo
-const carProto= {
-  getColor () {
+const carProto = {
+  getColor() {
     /*retorno de valor color */
-    return this.color
-  }
-}
- /*cirando os dois novos objetos fazendo o obvjeto com o metodo get color ser prototype desses dois carros abaixo */
+    return this.color;
+  },
+};
+/*cirando os dois novos objetos fazendo o obvjeto com o metodo get color ser prototype desses dois carros abaixo */
 
-let audiA8 = Object.create(carProto)
-let volvoS90 = Object.create(carProto)
+let audiA8 = Object.create(carProto);
+let volvoS90 = Object.create(carProto);
 
 /*atribuindo valores diferentes aos objetos */
-audiA8.color ='azul'
-volvoS90.color = 'vermelho'
+audiA8.color = "azul";
+volvoS90.color = "vermelho";
 
 /*testando metodo */
 console.log(audiA8.getColor(), volvoS90.getColor());
 console.log(carProto.isPrototypeOf(audiA8) && carProto.isPrototypeOf(volvoS90));
-
- 
-
 
 /*
   02
@@ -47,17 +43,17 @@ console.log(carProto.isPrototypeOf(audiA8) && carProto.isPrototypeOf(volvoS90));
 */
 
 const movie = {
-  title: 'Forrest Gump',
-  director: 'Robert Zemeckis',
-  starringRole: 'Tom Hanks'
+  title: "Forrest Gump",
+  director: "Robert Zemeckis",
+  starringRole: "Tom Hanks",
+};
+
+function getSummary() {
+  const { title, director, starringRole } = this;
+  return `${title} foi dirigido por ${director} e tem ${starringRole} no papel principal.`;
 }
 
-function getSummary () {
-  const {title, director, starringRole} = this
-  return `${title} foi dirigido por ${director} e tem ${starringRole} no papel principal.`
-}
-
-const getSummaryBound = getSummary.bind(movie)
+const getSummaryBound = getSummary.bind(movie);
 
 // 3 formas de fazer trazer o mesmo resultado
 // Chamando a função 'getSummaryBound'
@@ -77,26 +73,22 @@ const getSummaryBound = getSummary.bind(movie)
   - Descomente o código e crie a função.
 */
 
-const createObj = (arr)=>  arr.reduce((acc, [key, value]) => {
-  console.log(acc.item);
-  acc[key] = value
-  return acc
- }, {})
+const createObj = (arr) =>
+  arr.reduce((acc, [key, value]) => {
+    console.log(acc.item);
+    acc[key] = value;
+    return acc;
+  }, {});
 
-const arrayToObj = (createObj)
- 
-
-
-
+const arrayToObj = createObj;
 
 //console.log(
 //  arrayToObj([
-//    ['prop1', 'value1'], 
+//    ['prop1', 'value1'],
 //    ['prop2', 'value2'],
 //    ['prop3', 'value3']
 //  ])
 //)
-
 
 /*
   04
@@ -104,31 +96,26 @@ const arrayToObj = (createObj)
   - Refatore as classes abaixo para factory functions.
 */
 
-const concatenateZero = unit => unit < 10 ? `0${unit}` : unit
+const concatenateZero = (unit) => (unit < 10 ? `0${unit}` : unit);
 
-const formatTimeUnits = units => units.map(concatenateZero)
+const formatTimeUnits = (units) => units.map(concatenateZero);
 
 const getTime = () => {
-  const date = new Date()
-  const hours = date.getHours()
-  const minutes = date.getMinutes()
-  const seconds = date.getSeconds()
+  const date = new Date();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
 
-  return [hours, minutes, seconds]
-}
+  return [hours, minutes, seconds];
+};
 
-const getFormattedTime = template => {
-  const [hours, minutes, seconds] = getTime()
-  const formattedTime = formatTimeUnits([hours, minutes, seconds])
-  const getTimeAsArray = (_, index) => formattedTime[index]
+const getFormattedTime = (template) => {
+  const [hours, minutes, seconds] = getTime();
+  const formattedTime = formatTimeUnits([hours, minutes, seconds]);
+  const getTimeAsArray = (_, index) => formattedTime[index];
 
-  return template
-    .split(':')
-    .map(getTimeAsArray)
-    .join(':')
-}
-
-
+  return template.split(":").map(getTimeAsArray).join(":");
+};
 
 const makeClock = ({ template }) => ({
   template,
@@ -147,32 +134,23 @@ const makeClock = ({ template }) => ({
   },
 });
 
-
 const makeExtendClock = ({ template, precision = 1000 }) => ({
   precision,
   ...makeClock({ template }),
-  start () {
+  start() {
     this.render();
     this.timer = setInterval(() => this.render(), this.precision);
   },
 });
 
-const clock = makeClock({template:'h:m:s'})
-const exetendClock = makeExtendClock({template:'h:m:s', precision:1000});
+const clock = makeClock({ template: "h:m:s" });
+const exetendClock = makeExtendClock({ template: "h:m:s", precision: 1000 });
 
+clock.start();
+clock.stop();
 
-clock.start()
-clock.stop()
-
-exetendClock.start()
-exetendClock.stop()
-
-
-
-
-
-
-
+exetendClock.start();
+exetendClock.stop();
 
 /*classe refatorada  Refatorada para factory function*/
 /*
@@ -199,8 +177,7 @@ class Clock {
 }
 */
 
-
- /* classe extend Refatorada para factory function*/
+/* classe extend Refatorada para factory function*/
 /*
 class ExtendedClock extends Clock {
   constructor (options) {
@@ -259,34 +236,31 @@ const clock = new ExtendedClock({ template: 'h:m:s', precision: 1000 })
         - download, com o valor 'table.csv'.
 */
 
-const tableRows = document.querySelectorAll("tr")
-const exportBtn = document.querySelector('[data-js="export-table-btn"]')
+const tableRows = document.querySelectorAll("tr");
+const exportBtn = document.querySelector('[data-js="export-table-btn"]');
 
-const getCellText = ({ textContent }) => textContent
+const getCellText = ({ textContent }) => textContent;
 
 const getStringWiithCommas = ({ cells }) =>
-  Array.from(cells).map(getCellText).join(",")
+  Array.from(cells).map(getCellText).join(",");
 
 const creatCSVString = () =>
-  Array.from(tableRows).map(getStringWiithCommas).join("\n")
+  Array.from(tableRows).map(getStringWiithCommas).join("\n");
 
 const setCSVDownload = (CSVString) => {
-  const CSVURI = `data:text/csvcharset=utf-8,${encodeURIComponent(CSVString)}`
+  const CSVURI = `data:text/csvcharset=utf-8,${encodeURIComponent(CSVString)}`;
 
-  exportBtn.setAttribute("href", CSVURI)
-  exportBtn.setAttribute("download", "table.csv")
-
+  exportBtn.setAttribute("href", CSVURI);
+  exportBtn.setAttribute("download", "table.csv");
 };
 
 const exportTable = () => {
   const CSVString = creatCSVString();
 
-  setCSVDownload(CSVString)
-}
+  setCSVDownload(CSVString);
+};
 // Chama a função para gerar a string CSV assim que o DOM estiver pr
 //exportBtn.addEventListener("click", exportTable)
-
-
 
 /*
   06
@@ -300,8 +274,6 @@ const exportTable = () => {
   - O procedimento é o mesmo mostrado nas aulas da etapa em que construímos 
     essa aplicação.
 */
-
-
 
 /*
   07
@@ -345,21 +317,64 @@ const exportTable = () => {
   de ver as próximas aulas, ok? =)
 */
 
-
-
 const currencyOneEl = document.querySelector('[data-js="currency-one"]');
 const currencyTwoEl = document.querySelector('[data-js="currency-two"]');
 const curreniesEl = document.querySelector('[data-js="currencies-container"]');
-const convertedValueEl = document.querySelector('[data-js="converted-value"]')
-const valuePrecisionEl = document.querySelector('[data-js="conversion-precision"]')
-const timesCurrencyOneEl = document.querySelector('[data-js="currency-one-times"]')
+const convertedValueEl = document.querySelector('[data-js="converted-value"]');
+const valuePrecisionEl = document.querySelector(
+  '[data-js="conversion-precision"]'
+);
+const timesCurrencyOneEl = document.querySelector(
+  '[data-js="currency-one-times"]'
+);
 
-let internalExchangeRate = {}
+//let internalExchangeRate = {}
 
+const showAlert = (err) => {
+  const div = document.createElement("div");
+  const button = document.createElement("button");
 
+  div.textContent = err.message;
+  div.classList.add(
+    "alert",
+    "alert-warning",
+    "alert-dismissible",
+    "fade",
+    "show"
+  );
+  div.setAttribute("role", "alert");
+  button.classList.add("btn-close");
+  button.setAttribute("type", "button");
+  button.setAttribute("aria-label", "Close");
 
-const getUrl = (currency)  =>` https://v6.exchangerate-api.com/v6/74fec6afa301a3ca6e83db74/latest/${currency}`;
+  const removeAlert = () => div.remove();
+  button.addEventListener("click", removeAlert);
 
+  div.appendChild(button);
+  curreniesEl.insertAdjacentElement("afterend", div);
+};
+
+//Clousure IFFI
+const state = (() => {
+  let exchangeRate = {};
+
+  return {
+    getExchangeRate: () => exchangeRate,
+    setExchangeRate: (newExchangeRate) => {
+      if (!newExchangeRate.conversion_rates) {
+        showAlert({ message: " Obejto não encontrado" });
+        return;
+      }
+
+      exchangeRate = newExchangeRate;
+      return exchangeRate;
+    },
+  };
+})();
+
+const apiKey = `74fec6afa301a3ca6e83db74`;
+const getUrl = (currency) =>
+  `https://v6.exchangerate-api.com/v6/${apiKey}/latest/${currency}`;
 
 const getErrormessage = (erroType) =>
   ({
@@ -380,73 +395,80 @@ const fetchExchangeRate = async (url) => {
       );
     }
 
-    const extendRateData = await response.json();
+    const exchangeRateData = await response.json();
 
-    if (extendRateData.result === "error") {
-      throw new Error(getErrormessage(extendRateData["error-type"]));
+    if (exchangeRateData.result === "error") {
+      const errorMessage = exchangeRateData["error-type"];
+      throw new Error(getErrormessage(errorMessage));
     }
 
-    return extendRateData
-
+    return state.setExchangeRate(exchangeRateData);
   } catch (err) {
-    const div = document.createElement("div");
-    const button = document.createElement("button");
-
-    div.textContent = err.message;
-    div.classList.add(
-      "alert",
-      "alert-warning",
-      "alert-dismissible",
-      "fade",
-      "show"
-    );
-    div.setAttribute("role", "alert");
-    button.classList.add("btn-close");
-    button.setAttribute("type", "button");
-    button.setAttribute("aria-label", "Close");
-
-    button.addEventListener("click", () => {
-      div.remove();
-    });
-
-    div.appendChild(button);
-    curreniesEl.insertAdjacentElement("afterend", div);
+    showAlert(err);
   }
+};
+const getOption = (selectedCurrency, conversion_rates) => {
+  const setSelectedAtrribute = (currency) =>
+    currency === selectedCurrency ? "selected" : "";
+  const getOptionsAsArray = (currency) =>
+    `<option ${setSelectedAtrribute(currency)}>${currency}</option>`;
+
+  return Object.keys(conversion_rates).map(getOptionsAsArray).join(" ");
+};
+
+const getMultipliedExchangeRate = (conversion_rates) => {
+  const currencyTwo = conversion_rates[currencyTwoEl.value];
+
+  return (timesCurrencyOneEl.value * currencyTwo).toFixed(2);
+};
+
+const getNotRoundedExchangeRate = (conversion_rates) => {
+  const currencyTwo = conversion_rates[currencyTwoEl.value];
+
+  return `1 ${currencyOneEl.value} = ${1 * currencyTwo} ${currencyTwoEl.value}`;
+};
+
+const showUpDatedRates = ({ conversion_rates }) => {
+  convertedValueEl.textContent = getMultipliedExchangeRate(conversion_rates);
+  valuePrecisionEl.textContent = getNotRoundedExchangeRate(conversion_rates);
+};
+
+const showInitialInfo = ({ conversion_rates }) => {
+  currencyOneEl.innerHTML = getOption("USD", conversion_rates);
+  currencyTwoEl.innerHTML = getOption("BRL", conversion_rates);
+
+  showUpDatedRates({ conversion_rates });
 };
 
 const init = async () => {
-  internalExchangeRate = {...(await fetchExchangeRate(getUrl('USD')))}
+  const url = getUrl("USD");
+  const exchangeRate = await fetchExchangeRate(url);
 
-  const getOption = selectedCurrency=>  Object.keys(internalExchangeRate.conversion_rates)
-  .map(currency => `<option ${ currency === selectedCurrency ? 'selected' : ''}>${currency}</option>`)
-  .join(' ')
-  
-  currencyOneEl.innerHTML = getOption('USD')
-  currencyTwoEl.innerHTML = getOption('BRL')
+  if (exchangeRate && exchangeRate.conversion_rates) {
+    showInitialInfo(exchangeRate);
+  }
+};
 
-  convertedValueEl.textContent = internalExchangeRate.conversion_rates.BRL.toFixed(2)
-  valuePrecisionEl.textContent = `1 ${currencyOneEl.value} = ${internalExchangeRate.conversion_rates.BRL} BRL`
-  
+const handleTimesCurrencyOneElInput = () => {
+  const { conversion_rates } = state.getExchangeRate();
 
-}
+  convertedValueEl.textContent = getMultipliedExchangeRate(conversion_rates);
+};
 
-timesCurrencyOneEl.addEventListener('input', (e)=> {
-  internalExchangeRate
-  convertedValueEl.textContent= e.target.value *( internalExchangeRate.conversion_rates[currencyTwoEl.value]).toFixed(2)
-})
+const handleCurrencyTwoElInput = () => {
+  const exchangeRate = state.getExchangeRate();
+  showUpDatedRates(exchangeRate);
+};
 
-currencyTwoEl.addEventListener('input', (e) => {
-  const currencyTwoValue = internalExchangeRate.conversion_rates[e.target.value]
-  convertedValueEl.textContent = (timesCurrencyOneEl.value * currencyTwoValue )
-  valuePrecisionEl.textContent= `1 USD = ${1* internalExchangeRate.conversion_rates[currencyTwoEl.value]} ${currencyTwoEl.value}`
-})
+const handleCurrencyOneElInput = async (e) => {
+  const url = getUrl(e.target.value);
+  const exchangeRate = await fetchExchangeRate(url);
 
-currencyOneEl.addEventListener('input', async (e)=> {
-  internalExchangeRate = {... (await fetchExchangeRate(getUrl(e.target.value)))}
+  showUpDatedRates(exchangeRate);
+};
 
-  convertedValueEl.textContent = (timesCurrencyOneEl.value * internalExchangeRate.conversion_rates[currencyTwoEl.value]).toFixed(2)
-  valuePrecisionEl.textContent = `1${currencyOneEl.value} = ${1 * internalExchangeRate.conversion_rates[currencyTwoEl.value]} ${currencyTwoEl.value}`
+timesCurrencyOneEl.addEventListener("input", handleTimesCurrencyOneElInput);
+currencyTwoEl.addEventListener("input", handleCurrencyTwoElInput);
+currencyOneEl.addEventListener("input", handleCurrencyOneElInput);
 
-})
-
-init ()
+init();
