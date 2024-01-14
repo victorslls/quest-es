@@ -472,3 +472,4 @@ currencyTwoEl.addEventListener("input", handleCurrencyTwoElInput);
 currencyOneEl.addEventListener("input", handleCurrencyOneElInput);
 
 init();
+
